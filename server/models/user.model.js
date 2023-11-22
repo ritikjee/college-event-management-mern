@@ -9,6 +9,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         required: 'Name is required'
     },
+    userName: {
+        type: String,
+        trim: true,
+        required: 'User Name is required',
+        unique: true
+    },
     email: {
         type: String,
         trim: true,
@@ -32,7 +38,7 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     college: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'College'
     },
     role: {
@@ -41,13 +47,13 @@ const userSchema = new mongoose.Schema({
     },
     followers: [
         {
-            type: ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
     ],
     following: [
         {
-            type: ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
     ]
