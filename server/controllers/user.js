@@ -39,9 +39,10 @@ export const getUserById = async (req, res) => {
 }
 
 export const registerUser = async (req, res) => {
-    const { name, email, password, about, college } = await req.body;
+    const { name, email, password, college,userName,imageLink } = await req.body;
+    // console.log(name, email, password, college, userName, imageLink)
 
-    const res1 = await User.findOne({ $or: [{ email: identifier }, { userName: identifier }] });
+    const res1 = await User.findOne({ $or: [{ email: email}, { userName: userName}] });
     if (res1) {
         return res.status(400).json({ error: "User already exists" });
     }
@@ -52,10 +53,12 @@ export const registerUser = async (req, res) => {
             const user = new User({
                 name,
                 email,
+                userName,
                 password: await bcryptjs.hash(password, 10),
-                about,
-                college: collegeRes
+                college: collegeRes,
+                imageLink,
             });
+            await user.save();
             res.status(201).json({ user });
         }
         else {
@@ -63,8 +66,10 @@ export const registerUser = async (req, res) => {
                 name,
                 email,
                 password: await bcryptjs.hash(password, 10),
-                about
+                userName,
+                imageLink,
             });
+            await user.save();
             res.status(201).json({ user });
         }
 
@@ -73,9 +78,12 @@ export const registerUser = async (req, res) => {
         const user = new User({
             name,
             email,
+            userName,
+            imageLink,
             password: await bcryptjs.hash(password, 10),
-            about
+            
         });
+        await user.save();
         res.status(201).json({ user });
     }
 

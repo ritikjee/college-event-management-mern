@@ -29,34 +29,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    photo: {
-        data: Buffer,
-        contentType: String
-    },
-    about: {
-        type: String,
-        trim: true
-    },
     college: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'College'
     },
-    role: {
-        type: Number,
-        default: 0
+    imageLink: {
+        type: String,
+        required: false
     },
-    followers: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ],
-    following: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ]
 }, {timestamps: true});
 
 export default mongoose.model('User', userSchema);

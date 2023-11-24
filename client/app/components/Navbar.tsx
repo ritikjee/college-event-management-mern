@@ -1,11 +1,17 @@
 'use client'
+
 import { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 import Loginpage from "./Login";
+import Register from "./Register";
+import { getToken , removeToken } from "../lib/auth";
+
 export default function Navbar() {
+    const token = getToken();
     const [show, setShow] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [showRegisterModal, setShowRegisterModal] = useState(false);
 
     return (
         <>
@@ -23,11 +29,16 @@ export default function Navbar() {
                             </div>
                         </div>
                         <div>
-                            <button className='bg-[#2270E2] text-xl hidden md:flex font-semibold text-white px-[18px] py-[8px] rounded-lg'       
+                            {!(token?.userId)?<button className='bg-[#2270E2] text-xl hidden md:flex font-semibold text-white px-[18px] py-[8px] rounded-lg'       
                             onClick={() => setShowLoginModal(!showLoginModal)}
                             >
                                 Login
-                            </button>
+                            </button>:
+                            <button className='bg-[#2270E2] text-xl hidden md:flex font-semibold text-white px-[18px] py-[8px] rounded-lg'       
+                            onClick={() => removeToken()}
+                            >
+                                Logout
+                            </button>}
                             {!show ?
                                 <GiHamburgerMenu id='open' className='md:hidden text-[32px] hover:cursor-pointer'
                                     onClick={() => setShow(!show)}
@@ -42,23 +53,36 @@ export default function Navbar() {
                     <p className="hover:cursor-pointer">Colleges</p>
                     <p className="hover:cursor-pointer">Events</p>
                     <p className="hover:cursor-pointer">
+                        {!(token?.userId)?
+                        <div className="flex flex-col gap-3">
                         <p className="bg-[#2270E2] text-white font-bold py-[12px] px-[24px] rounded-2xl" 
                         onClick={() => setShowLoginModal(!showLoginModal)}
                         >
                             Login
                         </p>
-                    </p>
-                    <p className="hover:cursor-pointer">
+                        <p className="hover:cursor-pointer">
                         <button className="bg-[#2270E2] text-white font-bold py-[12px] px-[24px] rounded-2xl"
                         >
                             Register
                         </button>
                     </p>
 
+                        </div>:
+                       <p className="bg-[#2270E2] text-white font-bold py-[12px] px-[24px] rounded-2xl" 
+                       onClick={() => removeToken()}
+                       >
+                           Logout
+                       </p>
+                        }
+                    </p>
+                   
                 </div>}
-                {
-                    showLoginModal&&<Loginpage setShowLoginModal={setShowLoginModal}/>
-                }
+                {showLoginModal && <div className="h-screen w-screen z-50 bg-black bg-opacity-40  fixed inset-0 flex items-center justify-center">
+                <Loginpage setShowLoginModal={setShowLoginModal} setShowRegisterModal={setShowRegisterModal} />
+            </div>}
+            {showRegisterModal && <div className="min-h-screen w-screen z-50 bg-black bg-opacity-40  fixed inset-0 flex items-center justify-center">
+                <Register setShowLoginModal={setShowLoginModal} setShowRegisterModal={setShowRegisterModal} />
+            </div>}
 
 
             </>
